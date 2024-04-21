@@ -1,20 +1,55 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { StatusBar, SafeAreaView } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Login from './src/Pages/Login';
+import CadastroAluno from './src/Pages/CadastroAluno';
+import CadastroProf from './src/Pages/CadastroProf';
+import AreaAluno from './src/Pages/AreaAluno';
+import AreaProf from './src/Pages/AreaProf';
+import ProfIndicados from './src/Pages/ProfIndicados';
+import { Image, View, TouchableOpacity } from 'react-native';
+import logo from '../fitConnect/assets/logo.png';
+import { AntDesign } from '@expo/vector-icons'; // Importe o ícone desejado
+import axios from 'axios';
+
+const Stack = createNativeStackNavigator();
+//const {abrirLogin, setAbrirLogin} = useState(true);
+
+const CustomHeader = ({ navigation, route }) => (
+  <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, width: '100%', height: 70, borderBottomColor: 'white', backgroundColor: '#191B31' }}>
+    {route.name !== 'Login' && (
+      <TouchableOpacity style={{ position: 'absolute', left: 10 }} onPress={() => navigation.goBack()}>
+        <AntDesign name="arrowleft" size={24} color="white" />
+      </TouchableOpacity>
+    )}
+    <View style={{ flex: 1, alignItems: 'center' }}>
+      <Image source={logo} style={{ width: 90, height: 90, resizeMode: 'contain' }} />
+    </View>
+  </View>
+);
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <SafeAreaView style={{ flex: 1 }}>
+        <StatusBar style="auto" />
+        <Stack.Navigator
+          screenOptions={{
+            headerTitleAlign: 'center',
+            headerStyle: { backgroundColor: '#191B31' },
+            headerTintColor: 'white',
+            header: (props) => <CustomHeader {...props} />,
+          }}
+        >
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="CadastroAluno" component={CadastroAluno} />
+          <Stack.Screen name="CadastroProf" component={CadastroProf} />
+          <Stack.Screen name="AreaAluno" component={AreaAluno} />
+          <Stack.Screen name="AreaProf" component={AreaProf} />
+          <Stack.Screen name="ProfIndicados" component={ProfIndicados} />
+        </Stack.Navigator>
+      </SafeAreaView>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
