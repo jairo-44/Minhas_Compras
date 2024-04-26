@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 import axios from 'axios';
 
@@ -25,12 +26,12 @@ export default class Login extends Component {
         this.props.navigation.navigate("CadastroProf");
     }
 
-    AreAluno() {
-        this.props.navigation.navigate("AreaAluno");
+    AreAluno(nomeAluno) {
+        this.props.navigation.navigate("AreaAluno", { nomeAluno: nomeAluno });
     }
 
-    AreProf() {
-        this.props.navigation.navigate("AreaProf");
+    AreProf(nomeProfissional) {
+        this.props.navigation.navigate("AreaProf", { nomeProfissional: nomeProfissional });
     }
 
     IndPro() {
@@ -47,19 +48,33 @@ export default class Login extends Component {
             });
     
             if (response.data.success) {
-                // Verifica o tipo de usuário retornado pela API
                 const tipoUsuario = response.data.usuario.tipo_usuario;
-                
-                // Redireciona para a página correspondente ao tipo de usuário
+    
                 if (tipoUsuario === 'aluno') {
-                    this.props.navigation.navigate("AreaAluno");
+                    // Obtendo o ID do aluno da resposta da API
+                    const idAluno = response.data.usuario.id;
+                    // Obtendo o nome do aluno da resposta da API
+                    const nomeAluno = response.data.usuario.nome;
+                    if (nomeAluno) {
+                        await AsyncStorage.setItem('nomeAluno', nomeAluno); // Salvando o nome do aluno localmente
+                    } else {
+                        console.error("Nome do aluno não encontrado na resposta da API");
+                    }
+                    // Navegando para a tela de AreaAluno com o ID e o nome do aluno
+                    this.props.navigation.navigate("AreaAluno", { idAluno: idAluno, nomeAluno: nomeAluno });
                 } else if (tipoUsuario === 'prof') {
-                    this.props.navigation.navigate("AreaProf");
+                    // Obtendo o nome do profissional da resposta da API
+                    const nomeProfissional = response.data.usuario.nome;
+                    if (nomeProfissional) {
+                        await AsyncStorage.setItem('nomeProfissional', nomeProfissional); // Salvando o nome do profissional localmente
+                    } else {
+                        console.error("Nome do profissional não encontrado na resposta da API");
+                    }
+                    this.props.navigation.navigate("AreaProf", { nomeProfissional: nomeProfissional });
                 } else {
                     Alert.alert("Erro ao Logar", "Tipo de usuário desconhecido.");
                 }
             } else {
-                // Credenciais inválidas, exibir mensagem de erro
                 Alert.alert("Erro ao Logar", "Dados Incorretos");
             }
         } catch (error) {
@@ -67,7 +82,6 @@ export default class Login extends Component {
             Alert.alert("Erro ao Logar", "Ocorreu um erro ao tentar fazer login. Por favor, tente novamente mais tarde.");
         }
     }
-    
     
 
     render() {
@@ -115,14 +129,6 @@ export default class Login extends Component {
                     </TouchableOpacity>
                 </View>
 
-                <View style={[styles.title, { flexDirection: 'row' }]}>
-                    
-
-                    <TouchableOpacity style={styles.buttonTemporarios} onPress={this.IndPro}>
-                        <Text style={styles.textButton}>P</Text>
-                    </TouchableOpacity>
-                </View>
-
                 <View style={styles.socialIconsContainer}>
                     <AntDesign style={styles.socialIcon} name="facebook-square" size={24} color="white" />
                     <FontAwesome5 style={styles.socialIcon} name="instagram-square" size={24} color="white" />
@@ -132,7 +138,6 @@ export default class Login extends Component {
         );
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {
