@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert, Image } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert, Image, ToastAndroid } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
-
 
 export default class CadastroProf extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      id: "",
       area: "",
       sexo: "",
       atendiOnLine: "",
@@ -21,67 +21,75 @@ export default class CadastroProf extends Component {
       estado: "",
       conselho: "",
       formacao: "",
-      certFormacao: "", // Modificado para uma string vazia em vez de null
+      certFormacao: "", 
       certEspec1: "",
       certEspec2: "",
       certEspec3: "",
       comentarioProf: ""
     };
-    this.api = 'http://192.168.1.9/fitConnect/add.php';
+    this.api = 'http://192.168.1.8/fitConnect/add.php';
+    this.fetchImages();
   }
 
-  selecionarFoto = async () => {
-    const { granted, uri } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  fetchImages = async () => {
+    
+  }
+
+  
+  handlePickerImage = async () => {
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!granted) {
-      Alert.alert(
-        'Permissão necessária',
-        'Permita que sua aplicação acesse as imagens'
-      );
+        Alert.alert(
+            'Permissão necessária',
+            'Permita que sua aplicação acesse as imagens'
+        );
     } else {
-      const { uri: imageUri, cancelled } = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        base64: false,
-        aspect: [4, 4],
-        quality: 1,
-      });
-  
-      if (!cancelled) {
-        const formData = new FormData();
-        formData.append('file', {
-          uri: imageUri,
-          type: 'image/jpeg', // ajuste o tipo conforme necessário
-          name: 'certFormacao.jpg' // nome do arquivo que será usado no servidor
+        const { assets, canceled } = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            base64: false,
+            aspect: [4, 4],
+            quality: 1,
         });
-  
-        try {
-          const response = await fetch('http://192.168.1.9/fitConnect/add.php', {
-            method: 'POST',
-            body: formData,
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-          
-          if (!response.ok) {
-            throw new Error('Erro ao enviar a imagem: ' + response.status);
-          }
-  
-          const data = await response.json();
-          if (data.success) {
-            // A imagem foi enviada com sucesso, agora você pode salvar a URL no estado
-            this.setState({ certFormacao: data.imageUrl });
-          } else {
-            // Tratar erro
-          }
-        } catch (error) {
-          console.error('Erro ao enviar imagem:', error);
-          // Tratar o erro aqui, por exemplo, exibir uma mensagem de erro ao usuário
-          Alert.alert('Erro', 'Erro ao enviar a imagem. Por favor, tente novamente mais tarde.');
+
+        if (canceled) {
+            ToastAndroid.show('Operação cancelada', ToastAndroid.SHORT);
+        } else {
+            const filename = assets[0].uri.substring(
+                assets[0].uri.lastIndexOf('/') + 1,
+                assets[0].uri.length
+            );
+
+            const extend = filename.split('.')[1];
+            const formData = new FormData();
+            formData.append('file', {
+                name: filename,
+                uri: assets[0].uri,
+                type: 'image/' + extend,
+            });
+            formData.append('id', this.state.id); // Assuming you have an 'id' in your state
+
+            try {
+                const response = await axios.post('http://192.168.1.8/fitConnect/upload.php', formData, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                if (response.data.success) {
+                    Alert.alert('Sucesso!', 'Imagem anexada!');
+                } else {
+                    Alert.alert('Erro', 'Imagem não enviada. Tente novamente.');
+                }
+            } catch (err) {
+                Alert.alert('Erro', 'Erro ao enviar sua imagem');
+            }
         }
-      }
     }
-  };
+};
+
+
+
 
   onSexoChange = (itemValue, itemIndex) => {
     this.setState({ sexo: itemValue });
@@ -93,6 +101,7 @@ export default class CadastroProf extends Component {
 
   limparCampos = () => {
     this.setState({
+      id: "",
       area: "",
       sexo: "",
       atendiOnLine: "",
@@ -104,7 +113,7 @@ export default class CadastroProf extends Component {
       estado: "",
       conselho: "",
       formacao: "",
-      certFormacao: "", // Modificado para uma string vazia
+      certFormacao: "", 
       certEspec1: "",
       certEspec2: "",
       certEspec3: "",
@@ -176,7 +185,7 @@ export default class CadastroProf extends Component {
       }
     } catch (error) {
       console.error("Erro ao cadastrar usuário:", error);
-      }
+    }
   };
 
     
@@ -200,6 +209,14 @@ export default class CadastroProf extends Component {
                 <Picker.Item label="Nutrição" value="Nutricao" />
               </Picker>
             </View>
+
+            <TextInput
+            style={Styles.input}
+            placeholderTextColor="#707070"
+            placeholder="ID"
+            value={this.state.id}
+            editable={false} // Torna o campo não editável
+          />
 
             <TextInput
               style={Styles.input}
@@ -293,15 +310,11 @@ export default class CadastroProf extends Component {
                 onChangeText={(certFormacao) => this.setState({ certFormacao })} 
               />
 
-              {/* Botão para selecionar foto */}
-              <TouchableOpacity style={Styles.buttonTermos} onPress={this.selecionarFoto}>
+              <TouchableOpacity style={Styles.buttonTermos} onPress={this.handlePickerImage}>
                 <Text style={Styles.textButton}>Anexar</Text>
               </TouchableOpacity>
             </View>
-            {/* Exibir a foto selecionada, se houver */}
-            {this.state.certFormacao && (
-  <Image source={{ uri: this.state.certFormacao }} style={{ width: 100, height: 100 }} />
-)}
+            
 
             <View style={Styles.rowContainer2}>
               <TextInput
@@ -369,7 +382,6 @@ export default class CadastroProf extends Component {
               </Picker>
             </View>
 
-
             <View style={Styles.navbar2}>
               <Text style={Styles.title2}>Termos</Text>
             </View>
@@ -392,6 +404,7 @@ export default class CadastroProf extends Component {
       );
     }
 }
+
 
 
 const Styles = StyleSheet.create({

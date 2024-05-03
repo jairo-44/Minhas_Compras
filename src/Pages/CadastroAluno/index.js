@@ -31,7 +31,7 @@ export default class CadastroAluno extends Component {
       comentarioAluno: "",    
       fotoAluno: "",  
     };
-    this.api = 'http://192.168.1.9/fitConnect/addAluno.php';
+    this.api = 'http://192.168.1.8/fitConnect/addAluno.php';
   }
 
   

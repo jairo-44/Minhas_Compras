@@ -15,7 +15,7 @@ export default class AreaAluno extends Component {
         const idAlunoLogado = this.props.route.params?.idAluno || '';
 
         // Faça uma solicitação para o endpoint da API perfilAluno para obter os dados do aluno logado
-        fetch(`http://192.168.1.9/fitConnect/perfilAluno.php?id=${idAlunoLogado}`)
+        fetch(`http://192.168.1.8/fitConnect/perfilAluno.php?id=${idAlunoLogado}`)
             .then(response => response.json())
             .then(data => {
                 console.log('Dados do perfil do aluno:', data);
@@ -42,6 +42,9 @@ export default class AreaAluno extends Component {
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.sidebarItem} onPress={() => this.navigateToScreen("ProfIndicados")}>
                             <Text style={styles.sidebarText}>Profissionais</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.sidebarItem} onPress={() => this.navigateToScreen("Bikes")}>
+                            <Text style={styles.sidebarText}>Aluguel de Bikes</Text>
                         </TouchableOpacity>
                     </ScrollView>
                 </View>

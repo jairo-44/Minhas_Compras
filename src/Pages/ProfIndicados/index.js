@@ -17,7 +17,7 @@ export default class ProfIndicados extends Component {
 
   async listarDados() {
     try {
-      const res = await axios.get('http://192.168.1.9/fitConnect/listar.php');
+      const res = await axios.get('http://192.168.1.8/fitConnect/listar.php');
       this.setState({ lista: res.data.result });
       console.log(res.data.result);
     } catch (error) {

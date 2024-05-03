@@ -15,7 +15,7 @@ export default class Login extends Component {
         this.CadAluno = this.CadAluno.bind(this);
         this.CadProf = this.CadProf.bind(this);
         this.AreAluno = this.AreAluno.bind(this);
-        this.IndPro = this.IndPro.bind(this);
+        this.alBikes = this.alBikes.bind(this);
     }
 
     CadAluno() {
@@ -34,15 +34,15 @@ export default class Login extends Component {
         this.props.navigation.navigate("AreaProf", { nomeProfissional: nomeProfissional });
     }
 
-    IndPro() {
-        this.props.navigation.navigate("ProfIndicados");
+    alBikes() {
+        this.props.navigation.navigate("Bikes");
     }
 
     async logar() {
         const { email, senha } = this.state;
     
         try {
-            const response = await axios.post('http://192.168.1.9/fitConnect/login.php', {
+            const response = await axios.post('http://192.168.1.8/fitConnect/login.php', {
                 email,
                 senha
             });
@@ -126,6 +126,13 @@ export default class Login extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={this.CadProf}>
                         <Text style={styles.textButton}>Profissional</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={[styles.title, { flexDirection: 'row' }]}>                   
+
+                    <TouchableOpacity style={styles.buttonTemporarios} onPress={this.alBikes}>
+                        <Text style={styles.textButton}>b</Text>
                     </TouchableOpacity>
                 </View>
 

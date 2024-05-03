@@ -8,9 +8,10 @@ import CadastroProf from './src/Pages/CadastroProf';
 import AreaAluno from './src/Pages/AreaAluno';
 import AreaProf from './src/Pages/AreaProf';
 import ProfIndicados from './src/Pages/ProfIndicados';
+import Bikes from './src/Pages/Bikes';
 import { Image, View, TouchableOpacity } from 'react-native';
 import logo from '../fitConnect/assets/logo.png';
-import { AntDesign } from '@expo/vector-icons'; // Importe o ícone desejado
+import { AntDesign } from '@expo/vector-icons'; 
 import axios from 'axios';
 
 const Stack = createNativeStackNavigator();
@@ -48,6 +49,7 @@ export default function App() {
           <Stack.Screen name="AreaAluno" component={AreaAluno} />
           <Stack.Screen name="AreaProf" component={AreaProf} />
           <Stack.Screen name="ProfIndicados" component={ProfIndicados} />
+          <Stack.Screen name="Bikes" component={Bikes} />
         </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>
