@@ -131,9 +131,11 @@ export default class Login extends Component {
 
                 <View style={[styles.title, { flexDirection: 'row' }]}>                   
 
+                    {/* 
                     <TouchableOpacity style={styles.buttonTemporarios} onPress={this.alBikes}>
                         <Text style={styles.textButton}>b</Text>
                     </TouchableOpacity>
+                    */}
                 </View>
 
                 <View style={styles.socialIconsContainer}>
