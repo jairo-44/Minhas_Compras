@@ -1,5 +1,13 @@
 Projeto Integrador
 
+Integrantes do Grupo
+- GIOVANY DAL BELLO
+- GUILHERME LIMA RETT
+- EDUARDO MOTTA JUSTO
+- CICERO PEREIRA LIRA
+- BIANCA SILVA DE OLIVEIRA
+- JAIRO SOUZA DOS SANTOS
+
 2ª Entrega
 
 Integrantes da equipe:
