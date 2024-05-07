@@ -1,6 +1,5 @@
-import React, { Component, useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
+import React, { Component } from "react";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from "react-native";
 import axios from 'axios';
 
 export default class ProfIndicados extends Component {
@@ -16,7 +15,7 @@ export default class ProfIndicados extends Component {
   }
 
   async listarDados() {
-    try {
+    try { 
       const res = await axios.get('http://192.168.1.8/fitConnect/listar.php');
       this.setState({ lista: res.data.result });
       console.log(res.data.result);
@@ -26,30 +25,43 @@ export default class ProfIndicados extends Component {
   }
 
   render() {
+    const { lista } = this.state;
+    
     return (
-      <View style={Styles.container}>
-        <View style={Styles.navbar}>
-          <Text style={Styles.title}>Lista de Profissionais</Text>
+      <View style={styles.container}>
+        <View style={styles.navbar}>
+          <Text style={styles.title}>Lista de Profissionais</Text>
         </View>
 
-        <View style={Styles.listContainer}>
+        <View style={styles.listContainer}>
           <FlatList
-            data={this.state.lista}
+            data={lista}
             renderItem={({ item }) => (              
-                <View style={Styles.itemHeader}>
-                  <Text style={Styles.highlightedName}>{item.nome}</Text>                
-                <View style={Styles.itemDetails}>
-                  <Text style={Styles.listItem}>Formado em: {item.area}</Text>
-                  <Text style={Styles.listItem}>{item.comentarioProf}</Text>
-                  <Text style={Styles.listItem}>Atendimento Online: {item.atendiOnLine}</Text>
+              <View style={styles.itemHeader}>
+                <Text style={styles.highlightedName}>{item.nome}</Text>                
+                <View style={styles.itemDetails}>
+                  <View style={styles.areaFoto}>
+                    <View style={styles.fotoPerfil}>
+                    <Image
+                        source={{ uri: `http://192.168.1.8/fitConnect/uploads/${item.fotoPerfilProf}` }}
+                        style={styles.foto}
+                        resizeMode="cover"
+                      />
+                      {console.log(`http://192.168.1.8/fitConnect/uploads/${item.fotoPerfilProf}`)}
+                    </View>
+                  </View>
+                  <Text style={styles.listItem}>Formado em: {item.area}</Text>
+                  <Text style={styles.listItem}>{item.comentarioProf}</Text>
+                  <Text style={styles.listItem}>Atendimento Online: {item.atendiOnLine}</Text>
+                  <Text style={styles.listItem}>Nome imagem: {item.fotoPerfilProf}</Text>
                 </View>
 
-                <View style={Styles.buttonContainer}>
-                <TouchableOpacity style={Styles.button} onPress={this.add}>
-                    <Text style={Styles.textButton}>Perfil completo</Text>
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.button} onPress={this.add}>
+                    <Text style={styles.textButton}>Perfil completo</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={Styles.button} onPress={this.add}>
-                    <Text style={Styles.textButton}>Contratar</Text>
+                  <TouchableOpacity style={styles.button} onPress={this.add}>
+                    <Text style={styles.textButton}>Contratar</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -61,7 +73,7 @@ export default class ProfIndicados extends Component {
   }
 }
 
-const Styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#191B31",
@@ -107,9 +119,9 @@ const Styles = StyleSheet.create({
   highlightedName: {
     fontSize: 16,
     fontWeight: 'bold',
-    backgroundColor: '#ADD8E6', // Cor de fundo azul mais suave
-    padding: 5, // Espaçamento interno
-    borderRadius: 5, // Borda arredondada
+    backgroundColor: '#ADD8E6', 
+    padding: 5, 
+    borderRadius: 5, 
   },
   listItem: {
     fontSize: 16,
@@ -118,14 +130,29 @@ const Styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#19CD9B",
-    padding: 10, // Aumenta o padding para tornar os botões mais largos
+    padding: 10, 
     borderRadius: 10,
-    width: 160, // Aumenta a largura dos botões
+    width: 160, 
     alignItems: 'center',
-    marginRight: 10, // Adiciona espaçamento entre os botões
+    marginRight: 10, 
     marginBottom:35,
   },
   textButton: {
     color: 'white',
   },
+  areaFoto: {
+    borderWidth: 2, 
+    borderColor: 'yellow', 
+    padding: 5, 
+  },
+  fotoPerfil: {
+    width: 50, 
+    height: 45, 
+    borderRadius: 50, 
+    overflow: "hidden", 
+  },
+  borderYellow: {
+    borderColor: 'yellow',
+  },
+  
 });

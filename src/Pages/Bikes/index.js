@@ -13,7 +13,7 @@ const modeloParaImagem = {
   "T700": require("../../../../fitConnect/assets/bikes/T700.png"),
   "R500": require("../../../../fitConnect/assets/bikes/R500.png"),
   "M3000": require("../../../../fitConnect/assets/bikes/M3000.png"),
-  "X800": require("../../../../fitConnect/assets/bikes/X800.png"),
+  "RX8000": require("../../../../fitConnect/assets/bikes/RX8000.png"),  
   "F450": require("../../../../fitConnect/assets/bikes/F450.png"),
   "K100": require("../../../../fitConnect/assets/bikes/K100.png"),
   "EFB600": require("../../../../fitConnect/assets/bikes/EFB600.png"),

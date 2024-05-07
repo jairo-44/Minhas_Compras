@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { Picker } from '@react-native-picker/picker';
+import * as ImagePicker from 'expo-image-picker';
 import * as Animatable from 'react-native-animatable';
 import axios from 'axios';
 
 export default class CadastroAluno extends Component {
 
-  
   constructor(props) {
     super(props);
     this.state = {
+      idAluno: "",
       nomeAluno: "",
       emailAluno: "",
       senhaAluno: "",
@@ -29,12 +30,61 @@ export default class CadastroAluno extends Component {
       problSaude: "",
       qualProbl: "",
       comentarioAluno: "",    
-      fotoAluno: "",  
+      fotoPerfilAluno: "",  
     };
     this.api = 'http://192.168.1.8/fitConnect/addAluno.php';
   }
 
-  
+  fotoPerfil = async () => {
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!granted) {
+        Alert.alert(
+            'Permissão necessária',
+            'Permita que sua aplicação acesse as imagens'
+        );
+    } else {
+        const { assets, canceled } = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            base64: false,
+            aspect: [4, 4],
+            quality: 1,
+        });
+
+        if (canceled) {
+            ToastAndroid.show('Operação cancelada', ToastAndroid.SHORT);
+        } else {
+            const filename = assets[0].uri.split('/').pop(); // Obtém o nome do arquivo a partir do caminho completo do URI
+            const extend = filename.split('.')[1];
+            const formData = new FormData();
+            formData.append('file', {
+                name: filename,
+                uri: assets[0].uri,
+                type: 'image/' + extend,
+            });
+            formData.append('id', this.state.id); // Assuming you have an 'id' in your state
+
+            try {
+                const response = await axios.post('http://192.168.1.8/fitConnect/uploadAluno.php', formData, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                if (response.data.success) {
+                    Alert.alert('Sucesso!', 'Imagem anexada!');
+                    // Atualize o estado com o nome da imagem selecionada
+                    this.setState({fotoPerfilAluno: filename });
+                } else {
+                    Alert.alert('Erro', 'Imagem não enviada. Tente novamente.');
+                }
+            } catch (err) {
+                Alert.alert('Erro', 'Erro ao enviar sua imagem');
+            }
+        }
+    }
+  };
+
   onqualProfChange = (itemValue, itemIndex) => {
     this.setState({ qualProf: itemValue });
   };
@@ -61,6 +111,7 @@ export default class CadastroAluno extends Component {
 
   limparCampos = () => {
     this.setState({
+      idAluno:"",
       nomeAluno: "",
       emailAluno: "",
       senhaAluno: "",
@@ -80,7 +131,7 @@ export default class CadastroAluno extends Component {
       problSaude: "",
       qualProbl: "",
       comentarioAluno: "",
-      fotoAluno: "",
+      fotoPerfilAluno: "",
     });
   };
 
@@ -90,6 +141,7 @@ export default class CadastroAluno extends Component {
 
   addAluno = async () => {
     const {
+      idAluno,
       nomeAluno,
       emailAluno,
       senhaAluno,
@@ -109,10 +161,11 @@ export default class CadastroAluno extends Component {
       problSaude,
       qualProbl,
       comentarioAluno,
-      fotoAluno,
+      fotoPerfilAluno,
     } = this.state;
 
     const obj = {
+      idAluno,
       nomeAluno,
       emailAluno,
       senhaAluno,
@@ -132,7 +185,7 @@ export default class CadastroAluno extends Component {
       problSaude,
       qualProbl,
       comentarioAluno,
-      fotoAluno,
+      fotoPerfilAluno,
     };
 
     try {
@@ -157,8 +210,6 @@ export default class CadastroAluno extends Component {
     }
   };
 
-
-
   render() {
     return (
       
@@ -167,6 +218,15 @@ export default class CadastroAluno extends Component {
             <View style={Styles.navbar}>
               <Text style={Styles.title}>Cadastro Aluno/Paciente</Text>
             </View>
+
+            <TextInput
+              style={Styles.input}
+              placeholderTextColor="#707070"
+              placeholder="Id"
+              value={this.state.idAluno}
+              editable={false} 
+              onChangeText={(idAluno) => this.setState({ idAluno })}
+            />
   
             <TextInput
               style={Styles.input}
@@ -234,6 +294,21 @@ export default class CadastroAluno extends Component {
             onChangeText={(estadoAluno) => this.setState({ estadoAluno })}
             />
           </View>
+
+          <View style={Styles.fotoPerfilAluno}>
+              <TextInput
+                style={Styles.input}
+                placeholderTextColor="#707070"
+                placeholder="Foto para o perfil"
+                value={this.state.fotoPerfilAluno}
+                editable={false}
+                onChangeText={(fotoPerfilAluno) => this.setState({ fotoPerfilAluno })}
+              />
+
+              <TouchableOpacity style={Styles.buttonTermos} onPress={this.fotoPerfil}>
+                <Text style={Styles.textButton}>Anexar</Text>
+              </TouchableOpacity>
+            </View>
 
           <View style={Styles.navbar2}>
             <Text style={Styles.title2}>Qual profissional você busca?</Text>
@@ -561,6 +636,12 @@ buttonTermos:{
   
 textButton:{
     color:"#070A1E", 
+},
+
+fotoPerfilAluno:{
+  alignItems: 'center',
+  marginTop:20
+  
 }
 
 });

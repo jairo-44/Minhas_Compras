@@ -6,7 +6,7 @@ import Login from './src/Pages/Login';
 import CadastroAluno from './src/Pages/CadastroAluno';
 import CadastroProf from './src/Pages/CadastroProf';
 import AreaAluno from './src/Pages/AreaAluno';
-import AreaProf from './src/Pages/AreaProf';
+import AreaProf from './src/Pages/AreaProf/index';
 import ProfIndicados from './src/Pages/ProfIndicados';
 import Bikes from './src/Pages/Bikes';
 import { Image, View, TouchableOpacity } from 'react-native';

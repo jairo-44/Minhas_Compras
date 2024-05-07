@@ -30,58 +30,67 @@ export default class Login extends Component {
         this.props.navigation.navigate("AreaAluno", { nomeAluno: nomeAluno });
     }
 
-    AreProf(nomeProfissional) {
-        this.props.navigation.navigate("AreaProf", { nomeProfissional: nomeProfissional });
+    AreProf(fotoProfissional, idProfissional, nomeProfissional) {
+        this.props.navigation.navigate("AreaProf", { 
+            fotoProfissional: fotoProfissional, 
+            idProfissional: idProfissional, 
+            nomeProfissional: nomeProfissional
+        });
     }
+    
 
     alBikes() {
         this.props.navigation.navigate("Bikes");
     }
 
     async logar() {
-        const { email, senha } = this.state;
-    
-        try {
-            const response = await axios.post('http://192.168.1.8/fitConnect/login.php', {
-                email,
-                senha
-            });
-    
-            if (response.data.success) {
-                const tipoUsuario = response.data.usuario.tipo_usuario;
-    
-                if (tipoUsuario === 'aluno') {
-                    // Obtendo o ID do aluno da resposta da API
-                    const idAluno = response.data.usuario.id;
-                    // Obtendo o nome do aluno da resposta da API
-                    const nomeAluno = response.data.usuario.nome;
-                    if (nomeAluno) {
-                        await AsyncStorage.setItem('nomeAluno', nomeAluno); // Salvando o nome do aluno localmente
-                    } else {
-                        console.error("Nome do aluno não encontrado na resposta da API");
-                    }
-                    // Navegando para a tela de AreaAluno com o ID e o nome do aluno
-                    this.props.navigation.navigate("AreaAluno", { idAluno: idAluno, nomeAluno: nomeAluno });
-                } else if (tipoUsuario === 'prof') {
-                    // Obtendo o nome do profissional da resposta da API
-                    const nomeProfissional = response.data.usuario.nome;
-                    if (nomeProfissional) {
-                        await AsyncStorage.setItem('nomeProfissional', nomeProfissional); // Salvando o nome do profissional localmente
-                    } else {
-                        console.error("Nome do profissional não encontrado na resposta da API");
-                    }
-                    this.props.navigation.navigate("AreaProf", { nomeProfissional: nomeProfissional });
+    const { email, senha } = this.state;
+
+    try {
+        const response = await axios.post('http://192.168.1.8/fitConnect/login.php', {
+            email,
+            senha
+        });
+
+        if (response.data.success) {
+            const tipoUsuario = response.data.usuario.tipo_usuario;
+
+            if (tipoUsuario === 'aluno') {
+                const idAluno = response.data.usuario.id;
+                const nomeAluno = response.data.usuario.nome;
+                if (nomeAluno) {
+                    await AsyncStorage.setItem('nomeAluno', nomeAluno); 
                 } else {
-                    Alert.alert("Erro ao Logar", "Tipo de usuário desconhecido.");
+                    console.error("Nome do aluno não encontrado na resposta da API");
                 }
+                this.props.navigation.navigate("AreaAluno", { idAluno, nomeAluno });
+            } else if (tipoUsuario === 'prof') {
+                const idProfissional = response.data.usuario.id;
+                const nomeProfissional = response.data.usuario.nome;
+                const fotoProfissional = response.data.usuario.fotoPerfilProf;
+                if (nomeProfissional) {
+                    await AsyncStorage.setItem('nomeProfissional', nomeProfissional); 
+                    await AsyncStorage.setItem('idProfissional', idProfissional.toString()); 
+                    if (fotoProfissional) {
+                        await AsyncStorage.setItem('fotoProfissional', fotoProfissional.toString());
+                    } else {
+                        console.error("Foto do profissional não encontrada na resposta da API");
+                    }
+                } else {
+                    console.error("Nome do profissional não encontrado na resposta da API");
+                }
+                this.props.navigation.navigate("AreaProf", { fotoProfissional, idProfissional, nomeProfissional });
             } else {
-                Alert.alert("Erro ao Logar", "Dados Incorretos");
+                Alert.alert("Erro ao Logar", "Tipo de usuário desconhecido.");
             }
-        } catch (error) {
-            console.error("Erro ao fazer login:", error);
-            Alert.alert("Erro ao Logar", "Ocorreu um erro ao tentar fazer login. Por favor, tente novamente mais tarde.");
+        } else {
+            Alert.alert("Erro ao Logar", "Dados Incorretos");
         }
+    } catch (error) {
+        console.error("Erro ao fazer login:", error);
+        Alert.alert("Erro ao Logar", "Ocorreu um erro ao tentar fazer login. Por favor, tente novamente mais tarde.");
     }
+}
     
 
     render() {
@@ -131,9 +140,11 @@ export default class Login extends Component {
 
                 <View style={[styles.title, { flexDirection: 'row' }]}>                   
 
+                    {/* 
                     <TouchableOpacity style={styles.buttonTemporarios} onPress={this.alBikes}>
                         <Text style={styles.textButton}>b</Text>
                     </TouchableOpacity>
+                    */}
                 </View>
 
                 <View style={styles.socialIconsContainer}>

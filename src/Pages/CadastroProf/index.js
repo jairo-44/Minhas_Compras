@@ -25,11 +25,64 @@ export default class CadastroProf extends Component {
       certEspec1: "",
       certEspec2: "",
       certEspec3: "",
-      comentarioProf: ""
+      comentarioProf: "",
+      fotoPerfilProf: ""
     };
     this.api = 'http://192.168.1.8/fitConnect/add.php';
     this.fetchImages();
   }
+
+  fotoPerfil = async () => {
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!granted) {
+        Alert.alert(
+            'Permissão necessária',
+            'Permita que sua aplicação acesse as imagens'
+        );
+    } else {
+        const { assets, canceled } = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            base64: false,
+            aspect: [4, 4],
+            quality: 1,
+        });
+
+        if (canceled) {
+            ToastAndroid.show('Operação cancelada', ToastAndroid.SHORT);
+        } else {
+            const filename = assets[0].uri.split('/').pop(); // Obtém o nome do arquivo a partir do caminho completo do URI
+            const extend = filename.split('.')[1];
+            const formData = new FormData();
+            formData.append('file', {
+                name: filename,
+                uri: assets[0].uri,
+                type: 'image/' + extend,
+            });
+            formData.append('id', this.state.id); // Assuming you have an 'id' in your state
+
+            try {
+                const response = await axios.post('http://192.168.1.8/fitConnect/fotoPerfilProf.php', formData, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                if (response.data.success) {
+                    Alert.alert('Sucesso!', 'Imagem anexada!');
+                    // Atualize o estado com o nome da imagem selecionada
+                    this.setState({ fotoPerfilProf: filename });
+                } else {
+                    Alert.alert('Erro', 'Imagem não enviada. Tente novamente.');
+                }
+            } catch (err) {
+                Alert.alert('Erro', 'Erro ao enviar sua imagem');
+            }
+        }
+    }
+};
+
+
 
   fetchImages = async () => {
     
@@ -78,6 +131,8 @@ export default class CadastroProf extends Component {
                 });
                 if (response.data.success) {
                     Alert.alert('Sucesso!', 'Imagem anexada!');
+                    // Atualize o estado com o nome da imagem selecionada
+                    this.setState({ certFormacao: filename });
                 } else {
                     Alert.alert('Erro', 'Imagem não enviada. Tente novamente.');
                 }
@@ -117,7 +172,8 @@ export default class CadastroProf extends Component {
       certEspec1: "",
       certEspec2: "",
       certEspec3: "",
-      comentarioProf: ""
+      comentarioProf: "",
+      fotoPerfilProf: ""
     });
   };
 
@@ -143,7 +199,8 @@ export default class CadastroProf extends Component {
       comentarioProf,
       sexo,
       area,
-      atendiOnLine
+      atendiOnLine,
+      fotoPerfilProf
     } = this.state;
 
     const obj = {
@@ -163,7 +220,8 @@ export default class CadastroProf extends Component {
       comentarioProf,
       sexo,
       area,
-      atendiOnLine
+      atendiOnLine,
+      fotoPerfilProf
     };
 
     try {
@@ -297,17 +355,34 @@ export default class CadastroProf extends Component {
               />
             </View>
 
+            <View style={Styles.fotoPerfilProf}>
+              <TextInput
+                style={Styles.input}
+                placeholderTextColor="#707070"
+                placeholder="Foto para o perfil"
+                value={this.state.fotoPerfilProf}
+                editable={false}
+                onChangeText={(fotoPerfilProf) => this.setState({fotoPerfilProf})}
+              />
+
+              <TouchableOpacity style={Styles.buttonTermos} onPress={this.fotoPerfil}>
+                <Text style={Styles.textButton}>Anexar</Text>
+              </TouchableOpacity>
+            </View>
+
+            
+
             <View style={Styles.navbar2}>
               <Text style={Styles.title2}>Formação e especialidades</Text>
             </View>
 
             <View style={Styles.rowContainer2}>
               <TextInput
-                style={[Styles.input, Styles.halfInput2]}
+                style={Styles.input}
                 placeholderTextColor="#707070"
-                placeholder="Formação"
-                value={this.state.certFormacao} // Usando certFormacao para exibir o URI da imagem
-                onChangeText={(certFormacao) => this.setState({ certFormacao })} 
+                placeholder="Cetificado de formação"
+                value={this.state.certFormacao}
+                onChangeText={(certFormacao) => this.setState({ certFormacao })}
               />
 
               <TouchableOpacity style={Styles.buttonTermos} onPress={this.handlePickerImage}>
@@ -554,6 +629,12 @@ buttonTermos:{
   
 textButton:{
     color:"#070A1E", 
+},
+
+fotoPerfilProf:{
+  alignItems: 'center',
+  marginTop:20
+  
 }
 
 });
