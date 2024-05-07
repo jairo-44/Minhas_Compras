@@ -24,6 +24,10 @@ export default class ProfIndicados extends Component {
     }
   }
 
+  navigateToScreen = (screenName) => {
+    this.props.navigation.navigate(screenName);
+  };
+
   render() {
     const { lista } = this.state;
     
@@ -37,32 +41,35 @@ export default class ProfIndicados extends Component {
           <FlatList
             data={lista}
             renderItem={({ item }) => (              
-              <View style={styles.itemHeader}>
-                <Text style={styles.highlightedName}>{item.nome}</Text>                
-                <View style={styles.itemDetails}>
-                  <View style={styles.areaFoto}>
+              <View style={styles.listItemContainer}>
+                <View style={styles.itemHeader}>
+                  <View style={styles.nameAndPhotoContainer}>
+                    <Text style={styles.highlightedName}>{item.nome}</Text> 
                     <View style={styles.fotoPerfil}>
-                    <Image
+                      <Image
                         source={{ uri: `http://192.168.1.8/fitConnect/uploads/${item.fotoPerfilProf}` }}
                         style={styles.foto}
                         resizeMode="cover"
                       />
-                      {console.log(`http://192.168.1.8/fitConnect/uploads/${item.fotoPerfilProf}`)}
                     </View>
                   </View>
-                  <Text style={styles.listItem}>Formado em: {item.area}</Text>
-                  <Text style={styles.listItem}>{item.comentarioProf}</Text>
-                  <Text style={styles.listItem}>Atendimento Online: {item.atendiOnLine}</Text>
-                  <Text style={styles.listItem}>Nome imagem: {item.fotoPerfilProf}</Text>
                 </View>
+                <View style={styles.itemDetails}>     
+                  <Text style={styles.listItem}>Formado em: <Text style={styles.highlightedText}>{item.area}</Text></Text>
+                  <Text style={styles.listItem}>Sobre mim: <Text style={styles.highlightedText}>{item.comentarioProf}</Text></Text>
+                  <Text style={styles.listItem}>Atendimento Online: <Text style={styles.highlightedText}>{item.atendiOnLine}</Text></Text>                  
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => this.props.navigation.navigate("PerfilCompletoProf", { profissional: item })}
+                    >
+                        <Text style={styles.textButton}>Perfil completo</Text>
+                    </TouchableOpacity>
 
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.button} onPress={this.add}>
-                    <Text style={styles.textButton}>Perfil completo</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.button} onPress={this.add}>
-                    <Text style={styles.textButton}>Contratar</Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={this.add}>
+                      <Text style={styles.textButton}>Contratar</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             )}
@@ -98,61 +105,73 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   listItemContainer: {
-    flexDirection: 'row',
-    marginBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'white',
+    marginBottom: 2,
+    borderBottomWidth: 2,
+    borderBottomWidth: 4,
+    borderColor: 'white',
+    
   },
-  itemHeader: {
-    flex: 1,
+  
+  nameAndPhotoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor:'#DCE8F5'
   },
   itemDetails: {
     flex: 1,
     marginLeft: 10,
+    marginRight:10,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop:40,
+    borderBottomWidth: 1,
     
   },
   highlightedName: {
     fontSize: 16,
-    fontWeight: 'bold',
-    backgroundColor: '#ADD8E6', 
-    padding: 5, 
-    borderRadius: 5, 
+    fontWeight: 'bold',     
+    width: '80%', 
+  },
+  highlightedText: {    
+    fontSize: 13,
+    color: 'white',
   },
   listItem: {
     fontSize: 16,
-    marginBottom: 8,
-    color: 'white',
+    marginBottom: 20,
+    color: '#F1F5C1',
+    fontWeight: 'bold',
+    textAlign: 'justify'
   },
   button: {
     backgroundColor: "#19CD9B",
-    padding: 10, 
+    padding: 8, 
     borderRadius: 10,
-    width: 160, 
+    width: 120, 
     alignItems: 'center',
     marginRight: 10, 
-    marginBottom:35,
+    marginBottom:45,
+    borderBottomWidth: 1,
   },
   textButton: {
     color: 'white',
   },
   areaFoto: {
-    borderWidth: 2, 
-    borderColor: 'yellow', 
-    padding: 5, 
+    alignItems: 'flex-end',
+    marginTop: 0,
   },
   fotoPerfil: {
-    width: 50, 
-    height: 45, 
-    borderRadius: 50, 
-    overflow: "hidden", 
+    width: 90, 
+    height: 90, 
+    borderRadius: 45, 
   },
-  borderYellow: {
-    borderColor: 'yellow',
+  foto: {
+    width: '100%', 
+    height: '100%',
   },
-  
 });
+

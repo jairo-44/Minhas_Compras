@@ -100,9 +100,11 @@ export default class AreaAluno extends Component {
                             <Text style={styles.subtitle}>{nomeAluno}</Text>
                         </View>
                     </View>
+                    <View style={{ borderBottomWidth: 2, width: '100%', height: 10, borderBottomColor: '#19CD9B', backgroundColor: '#191B31', marginBottom: 12 }}></View>
+
                     <ScrollView>
 
-                    <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 2, width: '100%', height: 10, borderBottomColor: '#19CD9B', backgroundColor: '#191B31', marginBottom: 12 }}></View>
+                    <View style={{ }}></View>
 
                         <View style={[styles.camposDados]}>
                             <Text style={[styles.camposDadosText, styles.destaque,]}>Cidade:</Text>
@@ -257,10 +259,6 @@ const styles = StyleSheet.create({
         marginTop: 5,
         color: '#FFF',
         fontSize: 17,
-<<<<<<< HEAD
-=======
-        alignItems: 'end',
->>>>>>> aa51c73c92a17bc90fb070e1542afc5669c93a8f
          marginRight: 25 
     },
     fotoPerfil: {        

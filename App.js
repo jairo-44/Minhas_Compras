@@ -8,6 +8,7 @@ import CadastroProf from './src/Pages/CadastroProf';
 import AreaAluno from './src/Pages/AreaAluno';
 import AreaProf from './src/Pages/AreaProf/index';
 import ProfIndicados from './src/Pages/ProfIndicados';
+import PerfilCompletoProf from './src/Pages/PerfilCompletoProf';
 import Bikes from './src/Pages/Bikes';
 import { Image, View, TouchableOpacity } from 'react-native';
 import logo from '../fitConnect/assets/logo.png';
@@ -50,6 +51,7 @@ export default function App() {
           <Stack.Screen name="AreaProf" component={AreaProf} />
           <Stack.Screen name="ProfIndicados" component={ProfIndicados} />
           <Stack.Screen name="Bikes" component={Bikes} />
+          <Stack.Screen name="PerfilCompletoProf" component={PerfilCompletoProf} />
         </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>
