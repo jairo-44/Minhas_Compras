@@ -24,10 +24,10 @@ O aluno será direcionado para sua página onde através de links terá acesso a
 
 Já profissional terá acesso a sua área com alunos agendados, sendo listados por data e horários, bem como poderá também gerenciar os treinos/consultas dos alunos/pacientes.
 
-GitHub O Sistema está integrado ao banco de dados “cadastro.sql” que se encontra na pasta db_cadastro no repositório (2-_Entrega_PI).
+GitHub O Sistema está integrado ao banco de dados “fitconnect.sql” que se encontra na pasta "instruções" no google drive "https://drive.google.com/drive/folders/1yeLh1fk-u8H47Ts6TqKfCRWyqR046An2?usp=drive_link".
 
 Formulários integrados ao banco de dados:  Cadastro do aluno;  Cadastro do profissional  Login
 
-Link: https://github.com/App_FitConnect_PI/
+Link: git@github.com:jairo-44/App_FitConnect.git
 
 Youtube O vídeo resumido demonstrando do sistema em funcionamento está disponível no Link:

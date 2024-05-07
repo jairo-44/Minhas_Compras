@@ -257,6 +257,10 @@ const styles = StyleSheet.create({
         marginTop: 5,
         color: '#FFF',
         fontSize: 17,
+<<<<<<< HEAD
+=======
+        alignItems: 'end',
+>>>>>>> aa51c73c92a17bc90fb070e1542afc5669c93a8f
          marginRight: 25 
     },
     fotoPerfil: {        
