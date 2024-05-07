@@ -28,6 +28,6 @@ GitHub O Sistema está integrado ao banco de dados “fitconnect.sql” que se e
 
 Formulários integrados ao banco de dados:  Cadastro do aluno;  Cadastro do profissional  Login
 
-Link: https://github.com/App_FitConnect_PI/
+Link: git@github.com:jairo-44/App_FitConnect.git
 
 Youtube O vídeo resumido demonstrando do sistema em funcionamento está disponível no Link:
