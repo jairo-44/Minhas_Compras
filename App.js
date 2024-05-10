@@ -10,6 +10,7 @@ import AreaProf from './src/Pages/AreaProf/index';
 import ProfIndicados from './src/Pages/ProfIndicados';
 import PerfilCompletoProf from './src/Pages/PerfilCompletoProf';
 import Bikes from './src/Pages/Bikes';
+import AlugBikes from './src/Pages/AlugBikes';
 import { Image, View, TouchableOpacity } from 'react-native';
 import logo from '../fitConnect/assets/logo.png';
 import { AntDesign } from '@expo/vector-icons'; 
@@ -52,6 +53,7 @@ export default function App() {
           <Stack.Screen name="ProfIndicados" component={ProfIndicados} />
           <Stack.Screen name="Bikes" component={Bikes} />
           <Stack.Screen name="PerfilCompletoProf" component={PerfilCompletoProf} />
+          <Stack.Screen name="AlugBikes" component={AlugBikes} />
         </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>

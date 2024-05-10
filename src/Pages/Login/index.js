@@ -16,6 +16,7 @@ export default class Login extends Component {
         this.CadProf = this.CadProf.bind(this);
         this.AreAluno = this.AreAluno.bind(this);
         this.alBikes = this.alBikes.bind(this);
+        this.AlugBikes = this.AlugBikes.bind(this);
     }
 
     CadAluno() {
@@ -41,6 +42,10 @@ export default class Login extends Component {
 
     alBikes() {
         this.props.navigation.navigate("Bikes");
+    }
+
+    AlugBikes() {
+        this.props.navigation.navigate("AlugBikes");
     }
 
     async logar() {
