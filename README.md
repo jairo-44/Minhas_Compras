@@ -6,12 +6,12 @@ Faculdade SENAC
 
 Integrantes da equipe:
 
-Bianca Silva de Oliveira,
- Cicero Pereira Lira,
- Eduardo Motta Justo,
- Giovany Dal Bello,
- Guilherme Lima Rett,
- Jairo Souza dos Santos,
+- Bianca Silva de Oliveira
+- Cicero Pereira Lira
+- Eduardo Motta Justo
+- Giovany Dal Bello
+- Guilherme Lima Rett
+- Jairo Souza dos Santos
 
 Orientadores: Débora Richter, Evandro Carlos Teruel, 
 
@@ -21,9 +21,9 @@ Aplicativo para pessoas que necessitam de programas de emagrecimento, com orient
 
 Ferramentas utilizadas
 
-Back-And : PHP e MYSQL (Xamp) 
-Front-And: React_native, JavaScript e CSS
-Banco de dados: MySQL (Xamp/Apache)
+- Back-And : PHP e MYSQL (Xamp) 
+- Front-And: React_native, JavaScript e CSS
+- Banco de dados: MySQL (Xamp/Apache)
 
 Instruções de utilização
 
@@ -45,8 +45,9 @@ Youtube O vídeo resumido demonstrando do sistema em funcionamento está dispon�
 Instruções de instalação:
 
 - Instale o React Native e Xampo em sua máquina.
-- Baixe a pasta PI do diretório compartilhado no Google Drive (https://drive.google.com/drive/folders/1B1EhiJn3v9jcujBaDsPlki83sYcsABv4?usp=drive_link)
-- Clone o projeto para sua máquina
+- Baixe a pasta PI do diretório compartilhado no Google Drive (https://drive.google.com/drive/folders/1B1EhiJn3v9jcujBaDsPlki83sYcsABv4?usp=drive_link).
+- Baixe o banco de dados "fitconnect.sql" compartilhado no mesmo link (https://drive.google.com/drive/folders/1B1EhiJn3v9jcujBaDsPlki83sYcsABv4?usp=drive_link)
+- Clone o projeto para sua máquina (git@github.com:jairo-44/App_FitConnect.git)
 
 
 Como clonar o projeto GitHub para sua máquina:
@@ -67,10 +68,10 @@ Como clonar o projeto GitHub para sua máquina:
 Importar banco de dados
 1- Instale o Xamp (https://www.apachefriends.org/pt_br/index.html)
 2- Crie um novo banco de dados, descompacte e importer o aquivo fitconnect.sql
-3- Vá ao local de instalação do Xamp (geralmente é em c:), abra a pasta htdocs crie uma pasta com nome pasta fitConnect dentro dela, nela copie e cole todas as apis que estão compartilhadas no Google Drive (https://drive.google.com/drive/folders/1B1EhiJn3v9jcujBaDsPlki83sYcsABv4?usp=drive_link). São essas APIs que fazem a conexão do app com banco de dados.
+3- Vá ao local de instalação do Xamp (geralmente é em c:), abra a pasta htdocs crie uma pasta com nome pasta fitConnect dentro dela, em "fitConnect" criada, copie e cole todas as apis que estão compartilhadas no Google Drive (https://drive.google.com/drive/folders/1B1EhiJn3v9jcujBaDsPlki83sYcsABv4?usp=drive_link). São essas APIs que fazem a conexão do app com banco de dados.
 4- Na mesma pasta fitconnect que está em htdocs crie uma pasta com o nome 'uploads' é pra lá que as imagens salvas irão.
 
-observações: nos códigos dos formulários CadastroAluno, CadastroProf e login é necessário que na URL (http://192.168.1.9/fitConnect/addAluno.php) sejá colocado o IP da sua máquina Exemplo: (http://seu_IP/fitConnect/addAluno.php)
+observações: nos códigos dos formulários CadastroAluno, CadastroProf e login é necessário que na URL (http://192.168.1.9/fitConnect/addAluno.php) sejá colocado o IP da sua máquina Exemplo: (http://seu_IP/fitConnect/addAluno.php) para todas as URLs que chamam alguma API.
 
 À medida que colocar o projeto pra roda, o próprio react-native poderá gerar erros solicitando a instalação de dependências necessárias.
 
