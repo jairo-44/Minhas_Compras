@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert, Image, ToastAndroid } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
+import CheckBox from "../../../components/CheckBox";
 import axios from 'axios';
 
 export default class CadastroProf extends Component {
@@ -70,7 +71,6 @@ export default class CadastroProf extends Component {
                 });
                 if (response.data.success) {
                     Alert.alert('Sucesso!', 'Imagem anexada!');
-                    // Atualize o estado com o nome da imagem selecionada
                     this.setState({ fotoPerfilProf: filename });
                 } else {
                     Alert.alert('Erro', 'Imagem não enviada. Tente novamente.');
@@ -177,10 +177,7 @@ export default class CadastroProf extends Component {
     });
   };
 
-  mensagemDuplicidade = () => {
-    Alert.alert("Email já cadastrado!");
-  };
-
+  
   add = async () => {
     const {
       id,
@@ -249,6 +246,8 @@ export default class CadastroProf extends Component {
     
 
     render() {
+      const { pagamentoRealizado } = this.state;
+      const opcao1 = [{ text: 'Li e concordo', id: 1 }];
       return (
         <ScrollView contentContainerStyle={Styles.scrollViewContainer}>
           <View style={Styles.container}>
@@ -273,7 +272,7 @@ export default class CadastroProf extends Component {
             placeholderTextColor="#707070"
             placeholder="ID"
             value={this.state.id}
-            editable={false} // Torna o campo não editável
+            editable={false} 
           />
 
             <TextInput
@@ -293,6 +292,7 @@ export default class CadastroProf extends Component {
             />
 
             <TextInput
+              secureTextEntry={true}
               style={Styles.input}
               placeholderTextColor="#707070"
               placeholder="senha"
@@ -378,7 +378,7 @@ export default class CadastroProf extends Component {
 
             <View style={Styles.rowContainer2}>
               <TextInput
-                style={Styles.input}
+                style={[Styles.input, {width: "65%"}]}
                 placeholderTextColor="#707070"
                 placeholder="Cetificado de formação"
                 value={this.state.certFormacao}
@@ -464,10 +464,12 @@ export default class CadastroProf extends Component {
             <View >
               <Text style={[Styles.title2, { fontSize: 10 }]}>Declaro que as informações por mim prestadas são verdadeiras</Text>
             </View>
-
+            
             <TouchableOpacity style={Styles.buttonTermos} onPress={this.AreAluno}>
-              <Text style={Styles.textButton}>Termos</Text>
+              <Text style={Styles.textButton}>Termos</Text>              
             </TouchableOpacity>
+            <CheckBox options={opcao1} onChange={(op) => alert(op)} />
+            
 
             <View style={Styles.containerButton}>
               <TouchableOpacity style={Styles.button} onPress={this.add}>
@@ -590,7 +592,7 @@ const Styles = StyleSheet.create({
   rowContainer2: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "90%",
+    width: "80%",
     marginVertical: 3,
     
   },
@@ -606,7 +608,9 @@ const Styles = StyleSheet.create({
   halfInput3: {
     width: "25%",
   },
-  containerButton: {},
+  containerButton: {
+    marginTop:30,
+  },
  
   button:{
     backgroundColor:"#19CD9B",
@@ -621,7 +625,7 @@ const Styles = StyleSheet.create({
 buttonTermos:{
     backgroundColor:"gray",
     padding: 2,
-    marginBottom:15,
+    marginBottom:5,
     borderRadius: 5,
     width: 70,
     alignItems: 'center'

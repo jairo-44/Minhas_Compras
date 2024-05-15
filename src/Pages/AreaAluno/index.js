@@ -87,6 +87,10 @@ export default class AreaAluno extends Component {
                             <MaterialCommunityIcons name="bike-fast" size={30} color="white" />
                             <Text style={styles.sidebarText}>Aluguel Bike</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity style={styles.sidebarItem} onPress={() => this.navigateToScreen("AgendaConsultas")}>
+                                <MaterialCommunityIcons name="calendar-edit" size={30} color="white" />
+                                <Text style={styles.sidebarText}>Agendar</Text>
+                        </TouchableOpacity>
                     </ScrollView>                    
                     
                         <View style={styles.areaFoto}>

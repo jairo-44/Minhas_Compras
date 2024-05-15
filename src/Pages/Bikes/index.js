@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
   },
   itemSelected: {
-    backgroundColor: '#d3d3d3', // Cor de fundo mais escura quando selecionado
+    backgroundColor: '#d3d3d3', 
   },
   itemHeader: {
     flexDirection: 'row',

@@ -107,6 +107,12 @@ export default class AlugBikes extends Component {
     }
   };
 
+  handleConfirmar = () => {    
+    setTimeout(() => {
+      Alert.alert('Pagamento realizado com sucesso!');
+    }, 2000);
+  };
+
   validateDate = (date) => {
     const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/;
     return dateRegex.test(date);
@@ -305,9 +311,36 @@ export default class AlugBikes extends Component {
               </TouchableOpacity>
             </View>           
           </View>
+          <View style={Styles.containerCard}>
+              <View style={Styles.nomeCard}>
+                 <TextInput
+                   style={Styles.input}
+                    placeholderTextColor="#707070"
+                    placeholder="Nome"
+                  />                                
+             </View>
+                <View style={Styles.NumDataCard}>
+                    <TextInput
+                      style={[Styles.input, {width: '40%'}]}
+                      placeholderTextColor="#707070"
+                      placeholder="Número do cartão"
+                                    />
+                  <TextInput
+                      style={[Styles.input, {width: '25%'}]}
+                      placeholderTextColor="#707070"
+                      placeholder="Data de Validade"
+                      />
+                  <TextInput
+                      style={[Styles.input, {width: '15%'}]}
+                       placeholderTextColor="#707070"
+                       placeholder="C/V"
+                       />       
+                  </View>
+            </View>
+
           </View>
           <View style={Styles.containerButton}>
-            <TouchableOpacity style={Styles.button} onPress={this.add}>
+            <TouchableOpacity style={Styles.button} onPress={this.handleConfirmar}>
               <Text style={Styles.textButton}>Confirmar</Text>
             </TouchableOpacity>
           </View>
@@ -346,6 +379,8 @@ const Styles = StyleSheet.create({
   halfInput: {
     flex: 1, 
     marginRight: 10, 
+    height: 40
+    
   },
   rowContainer: {
     flexDirection: 'row', 
@@ -403,5 +438,25 @@ const Styles = StyleSheet.create({
     marginHorizontal: 5, 
     marginRight: 25,
     
-  }
+  },
+  NumDataCard: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    
+    marginBottom: 20,
+},
+nomeCard: {
+    flex: 1,
+    marginRight: 30,
+    marginLeft:10,
+    marginTop: 15,
+    width: '93%'
+},
+numDataValiud: {
+    flex: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+},
+
 });

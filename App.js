@@ -12,6 +12,7 @@ import PerfilCompletoProf from './src/Pages/PerfilCompletoProf';
 import Bikes from './src/Pages/Bikes';
 import AlugBikes from './src/Pages/AlugBikes';
 import { Image, View, TouchableOpacity } from 'react-native';
+import ContratProf from './src/Pages/ContratProf';
 import logo from '../fitConnect/assets/logo.png';
 import { AntDesign } from '@expo/vector-icons'; 
 import axios from 'axios';
@@ -54,6 +55,7 @@ export default function App() {
           <Stack.Screen name="Bikes" component={Bikes} />
           <Stack.Screen name="PerfilCompletoProf" component={PerfilCompletoProf} />
           <Stack.Screen name="AlugBikes" component={AlugBikes} />
+          <Stack.Screen name="ContratProf" component={ContratProf} />
         </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>

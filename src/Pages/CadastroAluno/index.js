@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert 
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import * as Animatable from 'react-native-animatable';
+import CheckBox from "../../../components/CheckBox";
 import axios from 'axios';
 
 export default class CadastroAluno extends Component {
@@ -62,7 +63,7 @@ export default class CadastroAluno extends Component {
                 uri: assets[0].uri,
                 type: 'image/' + extend,
             });
-            formData.append('id', this.state.id); // Assuming you have an 'id' in your state
+            formData.append('id', this.state.id); 
 
             try {
                 const response = await axios.post('http://192.168.1.8/fitConnect/uploadAluno.php', formData, {
@@ -211,6 +212,8 @@ export default class CadastroAluno extends Component {
   };
 
   render() {
+    const { pagamentoRealizado } = this.state;
+      const opcao1 = [{ text: 'Li e concordo', id: 1 }];
     return (
       
         <ScrollView contentContainerStyle={Styles.scrollViewContainer}>
@@ -245,6 +248,7 @@ export default class CadastroAluno extends Component {
           />
 
           <TextInput
+            secureTextEntry={true}
             style={Styles.input}
             placeholderTextColor="#707070"
             placeholder="Senha"
@@ -464,6 +468,7 @@ export default class CadastroAluno extends Component {
           <TouchableOpacity style={Styles.buttonTermos} onPress={this.AreAluno}>
             <Text style={Styles.textButton}>Termos</Text>
           </TouchableOpacity>
+          <CheckBox options={opcao1} onChange={(op) => alert(op)} />
 
           <View style={Styles.containerButton}>
           <TouchableOpacity style={Styles.button} onPress={this.addAluno}>
@@ -613,7 +618,9 @@ const Styles = StyleSheet.create({
   sexo: {
     fone: "50%",
   },
-  containerButton: {},
+  containerButton: {
+    marginTop:30,
+  },
  
   button:{
     backgroundColor:"#19CD9B",
@@ -628,7 +635,7 @@ const Styles = StyleSheet.create({
 buttonTermos:{
     backgroundColor:"gray",
     padding: 2,
-    marginBottom:15,
+    marginBottom:5,
     borderRadius: 5,
     width: 70,
     alignItems: 'center'

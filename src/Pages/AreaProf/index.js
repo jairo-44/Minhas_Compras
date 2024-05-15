@@ -15,18 +15,16 @@ export default class AreaProf extends Component {
         };
     }
 
-    componentDidMount() {
-        // Recupera o ID do profissional logado
+    componentDidMount() {        
         const idProfLogado = this.props.route.params?.idProfissional || '';
-
-        // Faça uma solicitação para o endpoint da API perfilProf para obter os dados do profissional logado
+        
         fetch(`http://192.168.1.8/fitConnect/perfilProf.php?id=${idProfLogado}`)
             .then(response => response.json())
             .then(data => {
                 console.log('Dados do perfil do profissional:', data);
                 this.setState({ perfilProf: data });               
             })
-            .catch(error => console.error('Erro ao buscar dados do perfil do profissional:', error));
+            
     }
 
     render() {

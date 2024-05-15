@@ -6,7 +6,7 @@ export default class PerfilCompletoProf extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            perfilCompletoProf: {} // Inicializa o estado para armazenar os dados do perfil do profissional
+            perfilCompletoProf: {} 
         };
     }
 
@@ -20,17 +20,16 @@ export default class PerfilCompletoProf extends Component {
             return;
         }
 
-        // Recupera o ID do profissional logado (supondo que o ID esteja disponível no state ou props)
+        
         const idProfLogado = profissional.id || '';
 
-        // Faça uma solicitação para o endpoint da API perfilcomplProf para obter os dados do profissional logado
+        
         fetch(`http://192.168.1.8/fitConnect/perfilcomplProf.php?id=${idProfLogado}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Dados do perfil do profissional:', data);
-                this.setState({ perfilCompletoProf: data });
-            })
-            .catch(error => console.error('Erro ao buscar dados do perfil do profissional:', error));
+    .then(response => response.json())
+    .then(data => {        
+        this.setState({ perfilCompletoProf: data });
+    });
+            
     }
 
     render() {
@@ -158,7 +157,5 @@ const styles = StyleSheet.create({
     },
     socialIcon: {
         marginRight: 85
-
-        , // Reduzindo o espaçamento entre os ícones
     },
 });

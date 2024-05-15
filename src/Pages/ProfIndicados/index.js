@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from "react-native";
 import axios from 'axios';
 
+// Desabilita os console warnings amarelos apenas para este arquivo
+console.disableYellowBox = true;
+
 export default class ProfIndicados extends Component {
   constructor(props) {
     super(props);
@@ -66,9 +69,13 @@ export default class ProfIndicados extends Component {
                         <Text style={styles.textButton}>Perfil completo</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={this.add}>
-                      <Text style={styles.textButton}>Contratar</Text>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => this.props.navigation.navigate("ContratProf", { profissional: item })}
+                    >
+                        <Text style={styles.textButton}>Contratar</Text>
                     </TouchableOpacity>
+                
                   </View>
                 </View>
               </View>

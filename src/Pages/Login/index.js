@@ -17,6 +17,9 @@ export default class Login extends Component {
         this.AreAluno = this.AreAluno.bind(this);
         this.alBikes = this.alBikes.bind(this);
         this.AlugBikes = this.AlugBikes.bind(this);
+        this.alBikes = this.alBikes.bind(this);
+        this.ContProf = this.ContProf.bind(this);
+
     }
 
     CadAluno() {
@@ -46,6 +49,9 @@ export default class Login extends Component {
 
     AlugBikes() {
         this.props.navigation.navigate("AlugBikes");
+    }
+    ContProf() {
+        this.props.navigation.navigate("ContratProf");
     }
 
     async logar() {
@@ -150,6 +156,7 @@ export default class Login extends Component {
                         <Text style={styles.textButton}>b</Text>
                     </TouchableOpacity>
                     */}
+                    
                 </View>
 
                 <View style={styles.socialIconsContainer}>
