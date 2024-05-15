@@ -6,12 +6,12 @@ Faculdade SENAC
 
 Integrantes da equipe:
 
-Bianca Silva de Oliveira
-Cicero Pereira Lira
-Eduardo Motta Justo
-Giovany Dal Bello
-Guilherme Lima Rett
-Jairo Souza dos Santos
+Bianca Silva de Oliveira,
+ Cicero Pereira Lira,
+ Eduardo Motta Justo,
+ Giovany Dal Bello,
+ Guilherme Lima Rett,
+ Jairo Souza dos Santos,
 
 Orientadores: Débora Richter, Evandro Carlos Teruel, 
 
