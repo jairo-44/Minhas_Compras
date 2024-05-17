@@ -39,7 +39,7 @@ Formulários integrados ao banco de dados: Cadastro do aluno; Cadastro do profis
 
 Link: git@github.com:jairo-44/App_FitConnect.git
 
-Youtube O vídeo resumido demonstrando do sistema em funcionamento está disponível no Link: https://youtu.be/bsvvodvJ7FE
+Youtube O vídeo resumido demonstrando do sistema em funcionamento está disponível no Link: https://youtu.be/visg7pEB3c0
 
 
 Instruções de instalação:
