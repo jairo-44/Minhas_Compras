@@ -1,245 +1,181 @@
-import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AntDesign, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, StyleSheet, Image } from 'react-native';
+import firebase from "../config/firebaseconfig";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import 'firebase/compat/auth';
 
-export default class Login extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: "",
-            senha: ""
-        };
+const Login = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [errorLogin, setErrorLogin] = useState(false);
 
-        this.CadAluno = this.CadAluno.bind(this);
-        this.CadProf = this.CadProf.bind(this);
-        this.AreAluno = this.AreAluno.bind(this);
-        this.alBikes = this.alBikes.bind(this);
-        this.AlugBikes = this.AlugBikes.bind(this);
-        this.alBikes = this.alBikes.bind(this);
-        this.ContProf = this.ContProf.bind(this);
-
-    }
-
-    CadAluno() {
-        this.props.navigation.navigate("CadastroAluno");
-    }
-
-    CadProf() {
-        this.props.navigation.navigate("CadastroProf");
-    }
-
-    AreAluno(nomeAluno) {
-        this.props.navigation.navigate("AreaAluno", { nomeAluno: nomeAluno });
-    }
-
-    AreProf(fotoProfissional, idProfissional, nomeProfissional) {
-        this.props.navigation.navigate("AreaProf", { 
-            fotoProfissional: fotoProfissional, 
-            idProfissional: idProfissional, 
-            nomeProfissional: nomeProfissional
+  const loginFirebase = () => {
+    firebase.auth().signInWithEmailAndPassword(email, senha)
+      .then((userCredential) => {
+        let user = userCredential.user;        
+        navigation.navigate("Home", { idUser: user.uid });
+      })
+      .catch((error) => {
+        setErrorLogin(true);
+        console.error("Erro ao logar:", error.code, error.message);
+      });
+  };
+  
+  const handlePasswordReset = () => {
+    if (email) {
+      firebase.auth().sendPasswordResetEmail(email)
+        .then(() => {
+          alert("Email de recuperação de senha enviado!");
+        })
+        .catch((error) => {
+          console.error("Erro ao enviar email de recuperação:", error.code, error.message);
         });
+    } else {
+      alert("Por favor, insira seu email para recuperar a senha.");
     }
-    
+  };
 
-    alBikes() {
-        this.props.navigation.navigate("Bikes");
-    }
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        navigation.navigate("Home", { idUser: user.uid })
+        var uid = user.uid;        
+      } 
+    });
+  }, []);
 
-    AlugBikes() {
-        this.props.navigation.navigate("AlugBikes");
-    }
-    ContProf() {
-        this.props.navigation.navigate("ContratProf");
-    }
+  return (
+    <KeyboardAvoidingView style={styles.container}>
+       <Image 
+      source={require('../../../assets/logoCompras.png')} 
+      style={styles.logo} 
+      />
+      <Text style={styles.title}>Minhas Compras</Text>
+      <TextInput
+        style={styles.input}
+        placeholder='Digite seu email'
+        type='text'
+        onChangeText={(text) => setEmail(text)}
+        value={email}
+        placeholderTextColor="#a9a9a9" 
+      />
+      <TextInput
+        style={styles.input}
+        secureTextEntry={true}
+        placeholder='Digite sua senha'
+        type='text'
+        onChangeText={(text) => setSenha(text)}
+        value={senha}
+        placeholderTextColor="#a9a9a9" 
+      />
+      {errorLogin && (
+        <View style={styles.contentAlert}>
+          <MaterialCommunityIcons
+            name='alert-circle'
+            size={24}
+            color="#bdbdbd"
+          />
+          <Text style={styles.warninAlert}>Email ou senha inválidos!</Text>
+        </View>
+      )}
+      {(email === "" || senha === "") ? (
+        <TouchableOpacity
+          disabled={true}
+          style={styles.buttonLogin}
+        >
+          <Text style={styles.textButtonLogin}>Entrar</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={styles.buttonLogin}
+          onPress={loginFirebase}
+        >
+          <Text style={styles.textButtonLogin}>Login</Text>
+        </TouchableOpacity>
+      )}
+      <Text style={styles.linkReset} onPress={handlePasswordReset}>
+        Esqueceu a senha?
+      </Text>
+      <Text style={styles.registro}>Não é registrado? Crie o seu registro agora.</Text>
+      <Text
+        style={styles.linkRegistro}
+        onPress={() => navigation.navigate("NovoUsuario")}
+      >
+        Registre-se agora!
+      </Text>
+      <View style={{ height: 100 }} />
+    </KeyboardAvoidingView>
+  );
+};
 
-    async logar() {
-    const { email, senha } = this.state;
-
-    try {
-        const response = await axios.post('http://192.168.1.8/fitConnect/login.php', {
-            email,
-            senha
-        });
-
-        if (response.data.success) {
-            const tipoUsuario = response.data.usuario.tipo_usuario;
-
-            if (tipoUsuario === 'aluno') {
-                const idAluno = response.data.usuario.id;
-                const nomeAluno = response.data.usuario.nome;
-                if (nomeAluno) {
-                    await AsyncStorage.setItem('nomeAluno', nomeAluno); 
-                } else {
-                    console.error("Nome do aluno não encontrado na resposta da API");
-                }
-                this.props.navigation.navigate("AreaAluno", { idAluno, nomeAluno });
-            } else if (tipoUsuario === 'prof') {
-                const idProfissional = response.data.usuario.id;
-                const nomeProfissional = response.data.usuario.nome;
-                const fotoProfissional = response.data.usuario.fotoPerfilProf;
-                if (nomeProfissional) {
-                    await AsyncStorage.setItem('nomeProfissional', nomeProfissional); 
-                    await AsyncStorage.setItem('idProfissional', idProfissional.toString()); 
-                    if (fotoProfissional) {
-                        await AsyncStorage.setItem('fotoProfissional', fotoProfissional.toString());
-                    } else {
-                        console.error("Foto do profissional não encontrada na resposta da API");
-                    }
-                } else {
-                    console.error("Nome do profissional não encontrado na resposta da API");
-                }
-                this.props.navigation.navigate("AreaProf", { fotoProfissional, idProfissional, nomeProfissional });
-            } else {
-                Alert.alert("Erro ao Logar", "Tipo de usuário desconhecido.");
-            }
-        } else {
-            Alert.alert("Erro ao Logar", "Dados Incorretos");
-        }
-    } catch (error) {
-        console.error("Erro ao fazer login:", error);
-        Alert.alert("Erro ao Logar", "Ocorreu um erro ao tentar fazer login. Por favor, tente novamente mais tarde.");
-    }
-}
-    
-
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text style={[styles.title, { marginBottom: 45 }]}>Já faz parte da nossa corrente? </Text>
-
-                <Text style={styles.title}>Entre </Text>
-
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(email) => this.setState({ email })}
-                    placeholderTextColor="#707070"
-                    placeholder='Email'
-                    value={this.state.email}
-                />
-
-                <TextInput
-                    secureTextEntry={true}
-                    style={styles.input}
-                    onChangeText={(senha) => this.setState({ senha })}
-                    placeholderTextColor="#707070"
-                    placeholder='Senha'
-                    value={this.state.senha}
-                />
-
-                <View style={styles.containerButton}>
-                    <TouchableOpacity style={styles.button} onPress={() => this.logar()}>
-                        <Text style={styles.textButton}>Entrar</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View>
-                    <Text style={styles.textoSpacing}>Conectando a necessidade por saúde e qualidade de vida a quem entende do assunto. </Text>
-                    <Text style={styles.textoSpacing}>Faça seu cadastro e entre para a corrente do bem-estar. </Text>
-                    <Text style={styles.textoSpacing2}>Cadastre-se.</Text>
-                </View>
-
-                <View style={styles.containerButton}>
-                    <TouchableOpacity style={styles.button} onPress={this.CadAluno}>
-                        <Text style={styles.textButton}>Aluno</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={this.CadProf}>
-                        <Text style={styles.textButton}>Profissional</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={[styles.title, { flexDirection: 'row' }]}>                   
-
-                    {/* 
-                    <TouchableOpacity style={styles.buttonTemporarios} onPress={this.alBikes}>
-                        <Text style={styles.textButton}>b</Text>
-                    </TouchableOpacity>
-                    */}
-                    
-                </View>
-
-                <View style={styles.socialIconsContainer}>
-                    <AntDesign style={styles.socialIcon} name="facebook-square" size={24} color="white" />
-                    <FontAwesome5 style={styles.socialIcon} name="instagram-square" size={24} color="white" />
-                    <FontAwesome6 style={styles.socialIcon} name="square-whatsapp" size={24} color="white" />
-                </View>
-            </View>
-        );
-    }
-}
+export default Login;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#191B31",
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    title: {
-        fontSize: 18,
-        color: "#FFF"
-    },
-    button: {
-        backgroundColor: "#19CD9B",
-        padding: 5,
-        marginHorizontal: 5,
-        borderRadius: 10,
-        width: 100,
-        alignItems: 'center'
-    },
-    buttonTemporarios: {
-        backgroundColor: "gray",
-        padding: 5,
-        marginHorizontal: 10,
-        borderRadius: 10,
-        width: 25,
-        height: 25,
-        alignItems: 'center'
-    },
-    containerButton: {
-        flexDirection: "row",
-        padding: 5,
-        marginBottom: 10,
-    },
-    textButton: {
-        color: "#070A1E",
-    },
-    input: {
-        height: 40,
-        width: "80%",
-        marginVertical: 10,
-        borderWidth: 1,
-        borderRadius: 10,
-        padding: 10,
-        backgroundColor: "#DCE8F5",
-    },
-    textoSpacing: {
-        marginBottom: 0,
-        marginTop: 0,
-        padding: 5,
-        color: "#FFF",
-        textAlign: 'center',
-        textAlignVertical: 'center',
-    },
-    textoSpacing2: {
-        marginBottom: 10,
-        marginTop: 15,
-        padding: 5,
-        color: "#FFF",
-        textAlign: 'center',
-        textAlignVertical: 'center',
-    },
-    socialIconsContainer: {
-        position: "absolute",
-        bottom: 0,
-        flexDirection: "row",
-        justifyContent: "space-around",
-        marginTop: 5,
-        paddingBottom: 20
-    },
-    socialIcon: {
-        width: 40,
-        height: 40
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  logo: {
+    width: 100,  
+    height: 100, 
+    marginBottom: 5, 
+  },
+  title: {
+    fontSize: 25,
+    color: "#F92E6A",
+    marginBottom:40,
+    fontWeight: "bold",
+  },
+  input: {
+    width: 300,
+    marginTop: 10,
+    padding: 10,
+    height: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F92E6A",
+    marginLeft: "auto",
+    marginRight: "auto",
+    color: "#4d5156",
+    textAlign: "center", 
+  },
+  buttonLogin: {
+    width: 200,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F92E6A",
+    borderRadius: 30,
+    marginTop: 30,
+    marginBottom:40,
+  },
+  textButtonLogin: {
+    color: "#ffffff",
+  },
+  contentAlert: {
+    marginTop: 20,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  warninAlert: {
+    paddingLeft: 10,
+    color: "#bdbdbd",
+    fontSize: 16,
+  },
+  registro: {
+    marginTop: 20,
+    color: "#4d5156"
+  },
+  linkRegistro: {
+    color: "#1877f2",
+    fontSize: 16,
+    marginTop: 15,
+  },
+  linkReset: {
+    color: "#1877f2",
+    fontSize: 16,
+    marginTop: 10,
+  }
 });

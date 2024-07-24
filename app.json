@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "fitConnect",
+    "name": "Compras",
     "slug": "fitConnect",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,19 +15,24 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "package": "com.example.myapp",
-        "permissions": [
-          "CAMERA",
-          "READ_EXTERNAL_STORAGE",
-          "WRITE_EXTERNAL_STORAGE"
-        ]
-      }
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ],
+      "package": "com.jairo_3.MinhasCompras",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,9 +44,14 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "e88d41a1-732b-45d7-a935-44aaaf39837d"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/e88d41a1-732b-45d7-a935-44aaaf39837d"
+    }
   }
 }
-
-  
-
